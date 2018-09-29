@@ -16,6 +16,27 @@
             margin: 20px;
             font: 18px Helvetica, Arial;
         }
+
+        .log {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 15em;
+            background: black;
+            color: white;
+
+            font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+            font-size: 16px;
+            padding: 14px;
+            overflow-y: scroll;
+        }
+
+        .tag--verbose { color: white; }
+        .tag--debug { color: green; }
+        .tag--error { color: red; }
+        .tag--warning { color: orange; }
+        .tag--info { color: cyan; }
     </style>
 </head>
 
@@ -40,6 +61,13 @@
         socket.on("VOICE_RECOGNITION_ENDED", function () {
             $('#VOICE_RECOGNITION_ENDED').replaceWith("<div id='VOICE_RECOGNITION_ENDED'>VOICE_RECOGNITION_ENDED</div>")
         });
+        socket.on("RECEIVE_LOG", (logData) => {
+            let log = JSON.parse(logData)
+            let tag = `<p>[<span class="tag--${log.level}">${log.level.toUpperCase()}</span>] ${log.text}</p>`
+            let logBox = document.getElementById('log')
+            logBox.innerHTML += tag
+            logBox.scrollTop = logBox.scrollHeight
+        });
     });
 </script>
 
@@ -51,6 +79,8 @@
         <div id="VOICE_RECOGNITION_STARTED"></div>
         <div id="END_VOICE_RECOGNITION"></div>
         <div id="VOICE_RECOGNITION_ENDED"></div>
+    </div>
+    <div id="log" class="log">
     </div>
 </body>
 
