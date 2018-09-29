@@ -56,7 +56,7 @@ app.post("/responder/", (request, response) => {
     "Your neighbour, Lee Kai Yi of #03-06 is in an emergency situation. Please dial 0 if you are able to respond"
   );
   r.addGetDigits({
-    action: getUrl("responder-confirm"),
+    action: getUrl("responder_confirm"),
     timeout: 30,
     numDigits: 1
   });
