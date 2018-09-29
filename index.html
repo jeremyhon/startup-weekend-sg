@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Server monitor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 200px;
+            height: 100px;
+            margin: 20px;
+            font: 18px Helvetica, Arial;
+        }
+    </style>
+</head>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+    $(function () {
+        var socket = io();
+        $('#start').click(function () {
+            socket.emit('START_VOICE_RECOGNITION');
+            $('#status').replaceWith("<span id='status'>START_VOICE_RECOGNITION</span>")
+            return false;
+        });
+        $('#end').click(function () {
+            socket.emit('END_VOICE_RECOGNITION');
+            $('#status').replaceWith("<span id='status'>END_VOICE_RECOGNITION</span>")
+            return false;
+        });
+        socket.on("VOICE_RECOGNITION_STARTED", function () {
+            $('#status').replaceWith("<span id='status'>VOICE_RECOGNITION_STARTED</span>")
+        });
+        socket.on("VOICE_RECOGNITION_ENDED", function () {
+            $('#status').replaceWith("<span id='status'>VOICE_RECOGNITION_ENDED</span>")
+        });
+    });
+</script>
+
+<body>
+    <button id="start">Start</button>
+    <button id="end">End</button>
+    <span id="status">Running</span>
+</body>
+
+</html>
