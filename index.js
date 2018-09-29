@@ -14,7 +14,7 @@ app.post("/demo", function(request, response) {
   return Promise.all([
     p.calls.create("14849302202", "6588235544", getUrl("conference")),
     p.calls.create("14849302202", "6596700794", getUrl("conference")),
-    p.calls.create("14849302202", "6596686612", getUrl("automated"))
+    p.calls.create("14849302202", "6596686612", getUrl("responder"))
   ])
     .then(() => {
       response.sendStatus(200);
@@ -26,23 +26,19 @@ app.post("/demo", function(request, response) {
 });
 
 // endpoint to return conference info
-app.all("/conference/", function(request, response) {
+app.post("/conference/", function(request, response) {
   var r = plivo.Response();
   r.addSpeak(
     "You are being connected to the emergency call. Please wait while the other party picks up."
   );
   var params = {
-    enterSound: "beep:2", // Used to play a sound when a member enters the conference
-    record: "true", // Option to record the call
-    action: env.url + "conf_action/", // URL to which the API can send back parameters
-    method: "GET", // method to invoke the action Url
-    callbackUrl: env.url + "conf_callback/", // If specified, information is sent back to this URL
-    callbackMethod: "GET" // Method used to notify callbackUrl
+    enterSound: "",
+    startConferenceOnEnter: "true",
+    endConferenceOnExit: "true"
   };
 
   var conference_name = "demo"; // Conference Room name
   r.addConference(conference_name, params);
-  console.log(r.toXML());
 
   response.set({
     "Content-Type": "text/xml"
@@ -50,63 +46,32 @@ app.all("/conference/", function(request, response) {
   response.end(r.toXML());
 });
 
-app.all("/automated/", function(request, response) {
+app.post("/responder/", function(request, response) {
   var r = plivo.Response();
   r.addSpeak(
-    "Your neighbour mister tan at unit number 02-03 needs help. Please assist him."
+    "Your neighbour, Lee Kai Yi of #03-06 is in an emergency situation. Please dial 0 if you are able to respond"
   );
+  r.addGetDigits({
+    action: getUrl("responder-confirm"),
+    timeout: 30,
+    numDigits: 1
+  });
   response.set({
     "Content-Type": "text/xml"
   });
   response.end(r.toXML());
 });
 
-app.all("/conf_action/", function(request, response) {
-  var conf_name = request.param("ConferenceName");
-  var conf_uuid = request.param("ConferenceUUID");
-  var conf_mem_id = request.param("ConferenceMemberID");
-  var record_url = request.param("RecordUrl");
-  var record_id = request.param("RecordingID");
-
-  console.log(
-    "Conference Name : " +
-      conf_name +
-      " Conference UUID  : " +
-      conf_uuid +
-      " Conference Member ID : " +
-      conf_mem_id +
-      " Record Url : " +
-      record_url +
-      " Record ID : " +
-      record_id
+app.post("/responder_confirm/", (req, res) => {
+  const r = plivo.Response();
+  r.addSpeak(
+    "Thank you. Please check your SMS when you arrive. You can hang up now."
   );
-});
-
-app.all("/conf_callback/", function(request, response) {
-  var conf_action = request.param("ConferenceAction");
-  var conf_name = request.param("ConferenceName");
-  var conf_uuid = request.param("ConferenceUUID");
-  var conf_mem_id = request.param("ConferenceMemberID");
-  var call_uuid = request.param("CallUUID");
-  var record_url = request.param("RecordUrl");
-  var record_id = request.param("RecordingID");
-
-  console.log(
-    "Conference Action : " +
-      conf_action +
-      " Conference Name : " +
-      conf_name +
-      " Conference UUID  : " +
-      conf_uuid +
-      " Conference Member ID : " +
-      conf_mem_id +
-      " Call UUID : " +
-      call_uuid +
-      " Record Url : " +
-      record_url +
-      " Record ID : " +
-      record_id
-  );
+  p.messages.create("14849302202", "6596686612", "Lee Kai Yi's PIN is 223144");
+  response.set({
+    "Content-Type": "text/xml"
+  });
+  response.end(r.toXML());
 });
 
 // Outbound Conference
