@@ -26,19 +26,19 @@
         var socket = io();
         $('#start').click(function () {
             socket.emit('START_VOICE_RECOGNITION');
-            $('#status').replaceWith("<span id='status'>START_VOICE_RECOGNITION</span>")
+            $('#START_VOICE_RECOGNITION').replaceWith("<div id='START_VOICE_RECOGNITION'>START_VOICE_RECOGNITION</div>")
             return false;
         });
         $('#end').click(function () {
             socket.emit('END_VOICE_RECOGNITION');
-            $('#status').replaceWith("<span id='status'>END_VOICE_RECOGNITION</span>")
+            $('#END_VOICE_RECOGNITION').replaceWith("<div id='END_VOICE_RECOGNITION'>END_VOICE_RECOGNITION</div>")
             return false;
         });
         socket.on("VOICE_RECOGNITION_STARTED", function () {
-            $('#status').replaceWith("<span id='status'>VOICE_RECOGNITION_STARTED</span>")
+            $('#VOICE_RECOGNITION_STARTED').replaceWith("<div id='VOICE_RECOGNITION_STARTED'>VOICE_RECOGNITION_STARTED</div>")
         });
         socket.on("VOICE_RECOGNITION_ENDED", function () {
-            $('#status').replaceWith("<span id='status'>VOICE_RECOGNITION_ENDED</span>")
+            $('#VOICE_RECOGNITION_ENDED').replaceWith("<div id='VOICE_RECOGNITION_ENDED'>VOICE_RECOGNITION_ENDED</div>")
         });
     });
 </script>
@@ -46,7 +46,12 @@
 <body>
     <button id="start">Start</button>
     <button id="end">End</button>
-    <span id="status">Running</span>
+    <div>
+        <div id="START_VOICE_RECOGNITION"></div>
+        <div id="VOICE_RECOGNITION_STARTED"></div>
+        <div id="END_VOICE_RECOGNITION"></div>
+        <div id="VOICE_RECOGNITION_ENDED"></div>
+    </div>
 </body>
 
 </html>
