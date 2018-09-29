@@ -15,28 +15,28 @@ const initializeSwitch = app => {
     console.log("The IoT device is connected");
 
     socket.on(START_VOICE_RECOGNITION, () => {
-      io.emit(START_VOICE_RECOGNITION);
       console.log(`${START_VOICE_RECOGNITION}: START`);
     });
 
     socket.on(VOICE_RECOGNITION_STARTED, () => {
-      io.emit(VOICE_RECOGNITION_STARTED);
       console.log(`${VOICE_RECOGNITION_STARTED}: STARTED`);
     });
 
     socket.on(END_VOICE_RECOGNITION, () => {
-      io.emit(END_VOICE_RECOGNITION);
       console.log(`${END_VOICE_RECOGNITION}: END`);
     });
 
     socket.on(VOICE_RECOGNITION_ENDED, () => {
-      io.emit(VOICE_RECOGNITION_ENDED);
       console.log(`${VOICE_RECOGNITION_ENDED}: ENDED`);
     });
   });
 
   app.get("/", function(req, res) {
     res.sendFile(__dirname + "/index.html");
+  });
+
+  app.get("/mockapp", function(req, res) {
+    res.sendFile(__dirname + "/mockapp.html");
   });
 };
 
