@@ -66,7 +66,7 @@ app.post("/responder/", (request, response) => {
   response.end(r.toXML());
 });
 
-app.post("/responder_confirm/", (req, res) => {
+app.post("/responder_confirm/", (request, response) => {
   const r = plivo.Response();
   r.addSpeak(
     "Thank you. Please check your SMS when you arrive. You can hang up now."
