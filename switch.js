@@ -38,6 +38,10 @@ const initializeSwitch = app => {
   app.get("/", function(req, res) {
     res.sendFile(__dirname + "/index.html");
   });
+
+  app.get("/mockapp", function(req, res) {
+    res.sendFile(__dirname + "/mockapp.html");
+  });
 };
 
 module.exports = {
