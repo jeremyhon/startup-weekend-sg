@@ -1,9 +1,9 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
+  "name": "startup-weekend-sg",
+  "version": "1.0.0",
+  "description": "Node.js application for startup weekend sg",
   "engines": {
-    "node": "8.9.1"
+    "node": "8.11.3"
   },
   "main": "index.js",
   "scripts": {
