@@ -11,24 +11,18 @@ app.use(express.static(__dirname + "/public"));
 const getUrl = path => env.url + path + "/";
 
 app.post("/demo", function(request, response) {
-  p.calls
-    .create("14849302202", "6588235544", getUrl("conference"))
-    .then(function(response) {
-      console.log(response);
+  return Promise.all([
+    p.calls.create("14849302202", "6588235544", getUrl("conference")),
+    p.calls.create("14849302202", "6596700794", getUrl("conference")),
+    p.calls.create("14849302202", "6596686612", getUrl("automated"))
+  ])
+    .then(() => {
+      response.sendStatus(200);
     })
-    .catch(err => console.log(err));
-  p.calls
-    .create("14849302202", "6596700794", getUrl("conference"))
-    .then(function(response) {
-      console.log(response);
-    })
-    .catch(err => console.log(err));
-  p.calls
-    .create("14849302202", "6596686612", getUrl("automated"))
-    .then(function(response) {
-      console.log(response);
-    })
-    .catch(err => console.log(err));
+    .catch(err => {
+      response.status(500);
+      return response.send(err);
+    });
 });
 
 // endpoint to return conference info
