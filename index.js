@@ -7,26 +7,30 @@ const { initializeSwitch } = require("./switch");
 
 app.set("port", process.env.PORT || 5000);
 app.use(express.static(__dirname + "/public"));
+app.use(express.urlencoded({ extended: true }));
 
 const getUrl = path => env.url + path + "/";
 
-app.post("/demo", function(request, response) {
-  return Promise.all([
-    p.calls.create("14849302202", "6588235544", getUrl("conference")),
-    p.calls.create("14849302202", "6596700794", getUrl("conference")),
-    p.calls.create("14849302202", "6596686612", getUrl("responder"))
-  ])
-    .then(() => {
-      response.sendStatus(200);
-    })
-    .catch(err => {
-      response.status(500);
-      return response.send(err);
-    });
+app.post("/demo", async (req, response) => {
+  try {
+    if (!req.query.responder_only) {
+      console.log("calling conference");
+      await p.calls.create("14849302202", "6588235544", getUrl("conference"));
+      await p.calls.create("14849302202", "6596700794", getUrl("conference"));
+    }
+    if (!req.query.conference_only) {
+      console.log("calling responder");
+      await p.calls.create("14849302202", "6596686612", getUrl("responder"));
+    }
+    return response.sendStatus(200);
+  } catch (error) {
+    response.status(500);
+    return response.send(err);
+  }
 });
 
 // endpoint to return conference info
-app.post("/conference/", function(request, response) {
+app.post("/conference/", (request, response) => {
   var r = plivo.Response();
   r.addSpeak(
     "You are being connected to the emergency call. Please wait while the other party picks up."
@@ -46,7 +50,7 @@ app.post("/conference/", function(request, response) {
   response.end(r.toXML());
 });
 
-app.post("/responder/", function(request, response) {
+app.post("/responder/", (request, response) => {
   var r = plivo.Response();
   r.addSpeak(
     "Your neighbour, Lee Kai Yi of #03-06 is in an emergency situation. Please dial 0 if you are able to respond"
