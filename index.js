@@ -32,9 +32,9 @@ app.post("/demo", async (req, response) => {
 // endpoint to return conference info
 app.post("/conference/", (request, response) => {
   var r = plivo.Response();
-  r.addSpeak(
-    "You are being connected to the emergency call. Please wait while the other party picks up."
-  );
+  // r.addSpeak(
+  //   "You are being connected to the emergency call. Please wait while the other party picks up."
+  // );
   var params = {
     enterSound: "",
     startConferenceOnEnter: "true",
