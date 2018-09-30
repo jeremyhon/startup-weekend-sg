@@ -77,6 +77,10 @@
         $('#manual-trigger').click(function() {
             $.post('https://ancient-savannah-67182.herokuapp.com/demo')
         })
+
+        $('#confirm').click(function() {
+            socket.emit('SPEAK_CONFIRMATION')
+        })
     });
 </script>
 
@@ -87,6 +91,7 @@
     <button id="zh" class="lang-change">Chinese</button>
     <button id="ms" class="lang-change">Malay</button>
     <button id="manual-trigger">Trigger Emergency</button>
+    <button id="confirm">Speak Confirmation</button>
     <div>
         <div id="START_VOICE_RECOGNITION"></div>
         <div id="VOICE_RECOGNITION_STARTED"></div>
