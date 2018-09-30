@@ -3,6 +3,7 @@ const VOICE_RECOGNITION_STARTED = 'VOICE_RECOGNITION_STARTED'
 const END_VOICE_RECOGNITION = 'END_VOICE_RECOGNITION'
 const VOICE_RECOGNITION_ENDED = 'VOICE_RECOGNITION_ENDED'
 const RECEIVE_LOG = 'RECEIVE_LOG'
+const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE'
 
 const initializeSwitch = app => {
   const server = require('http').Server(app)
@@ -38,6 +39,11 @@ const initializeSwitch = app => {
     socket.on(RECEIVE_LOG, data => {
       console.log(`${RECEIVE_LOG} ${data}`)
       io.emit(RECEIVE_LOG, data)
+    })
+
+    socket.on(CHANGE_LANGUAGE, langCode => {
+      let payload = { code: langCode }
+      io.emit(CHANGE_LANGUAGE, JSON.stringify(payload))
     })
   })
 
