@@ -53,7 +53,7 @@ app.post("/conference/", (request, response) => {
 app.post("/responder/", (request, response) => {
   var r = plivo.Response();
   r.addSpeak(
-    "Your neighbour, Lee Kai Yi of #03-06 is in an emergency situation. Please dial 0 if you are able to respond"
+    "Your neighbour, Mr Lee is in an emergency situation, please dial 0 if you can respond to this"
   );
   r.addGetDigits({
     action: getUrl("responder_confirm"),
